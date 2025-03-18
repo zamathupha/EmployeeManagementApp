@@ -1,20 +1,86 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title>Welcome to Employee Management</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
-</ion-content>
+
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Employees</ion-card-title>
+      <ion-item>
+        <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="searchEmployees()" debounce="500" showClearButton="focus" placeholder="Search Employees"></ion-searchbar>
+      </ion-item>
+    </ion-card-header>
+    
+    <ion-button expand="block" (click)="addEmployee()">Add New Employee</ion-button>
+
+    <ion-button expand="block" (click)="loadEmployees()">View all Employees</ion-button> 
+    <ion-list>
+          <ion-item-sliding *ngFor="let employee of filteredEmployees">
+        
+        <ion-item>
+          <ion-label>
+            <h2>{{ employee.name }}</h2>
+            <p>{{ employee.department }} - {{ employee.position }}</p>
+            <p>{{ employee.contact }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item-options side="end">
+          <ion-item-option color="primary" (click)="editEmployee(employee)">Edit</ion-item-option>
+          <ion-item-option color="danger" (click)="deleteEmployee(employee.id)">Delete</ion-item-option>
+          
+
+          
+        </ion-item-options>
+      </ion-item-sliding>
+      
+    </ion-list>
+  </ion-card>
+
+  <ion-card *ngIf="editingEmployee">
+    <ion-card-header>
+      <ion-card-title>{{ editingEmployee.id ? 'Edit Employee' : 'Add Employee' }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      
+      <ion-card *ngIf="editingEmployee || employeeForm">
+        <ion-card-header>
+          <ion-card-title>{{ editingEmployee ? 'Edit Employee' : 'Add New Employee' }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <form (ngSubmit)="submitEmployeeForm()">
+            <ion-item>
+              <ion-label position="floating">Name</ion-label>
+              <ion-input [(ngModel)]="employeeForm.name" name="name" required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Department</ion-label>
+              <ion-input [(ngModel)]="employeeForm.department" name="department" required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Position</ion-label>
+              <ion-input [(ngModel)]="employeeForm.position" name="position" required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Contact</ion-label>
+              <ion-input [(ngModel)]="employeeForm.contact" name="contact" required></ion-input>
+            </ion-item>
+            <ion-button expand="block" type="submit">{{ editingEmployee ? 'Update Employee' : 'Add Employee' }}</ion-button>
+            <ion-button expand="block" (click)="cancelEdit()">Cancel</ion-button>
+          </form>
+        </ion-card-content>
+      </ion-card>
+      <ion-button expand="full" (click)="exitApp()">Exit</ion-button>
+  
+
+
+
+
+
+
+

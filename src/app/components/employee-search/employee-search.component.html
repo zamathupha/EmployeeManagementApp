@@ -1,0 +1,7 @@
+<ion-searchbar [(ngModel)]="searchQuery" (ionInput)="filterEmployees($event)"></ion-searchbar>
+<ion-list>
+  <ion-item *ngFor="let employee of filteredEmployees">
+    {{ employee.name }} - {{ employee.department }}
+  </ion-item>
+</ion-list>
+
